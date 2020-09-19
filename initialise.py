@@ -12,6 +12,7 @@ class initialise:
     #start method
     #==> initialise.start()
     def start(self, cwd):
+        paths = list()
         os.chdir(cwd)
         dir_shelve_path = "dirs_shelve.txt"
         filename_shelve_path = "filenames_shelve_path.txt"
@@ -27,11 +28,13 @@ class initialise:
         fileCaches = initialise.fileCahcer(cwd)
         #shelve contents of all lists to be used by add.
         dirShelf = shelve.open(dir_shelve_path)
-        dirShelf['dir'] = dirs
+        dirShelf['dirs'] = dirs
         dirShelf.close()
         fileCachesShelf = shelve.open(filename_shelve_path)
         fileCachesShelf['fileCaches'] = fileCaches
         fileCachesShelf.close()
+        paths.append(dir_shelve_path, filename_shelve_path)
+        return paths
 
     #method to find all files in file path
     def dirCacher(self, cwd):
@@ -48,7 +51,7 @@ class initialise:
         cacheFile = "cacheFile.txt"
         with open(filename, 'r') as f:
             lines = f.readlines()
-            for line in  lines:
+            for line in lines:
                 with open(cacheFile, 'w') as fc:
                     fc.write(line)
                     fc.close()

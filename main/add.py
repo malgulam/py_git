@@ -11,7 +11,6 @@ class addClass:
         self.filename = filename
         self.cwd = cwd
     def add(self, presentCWD):
-        #TODO: get list of dirs in this cwd
         updated_dirs = os.listdir()
         #changes dir list
         dir_changes = list()

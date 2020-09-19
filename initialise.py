@@ -49,7 +49,7 @@ class initialise:
     def cache(self, filename):
         lines = list()
         self.filename = filename
-        cacheFile = "cacheFile.txt"
+        cacheFile = f"{filename}_cacheFile.txt"
         with open(filename, 'r') as f:
             lines = f.readlines()
             for line in lines:

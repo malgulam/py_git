@@ -1,15 +1,15 @@
-#add.py
-
-from __future__ import with_statement
+#add class
+#handle all adding of new files
+#check changes
+#imports
 import os
+import sys
+import initialise
+class addClass:
+    def __init__(self, filename, cwd):
+        self.filename = filename
+        self.cwd = cwd
+    def add(self):
+        orginalFiles = initialise.initialise.
 
-def add(orginalFiles):
-    filenames = os.listdir()
-    newFiles = list()
-    for i in range(originalFiles):
-        if f"originalFiles[i]" == f"{filenames[i]}":
-            pass
-        else:
-            newFiles.append(filenames[i])
-    return newFiles 
 

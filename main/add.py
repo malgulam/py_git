@@ -10,6 +10,6 @@ class addClass:
         self.filename = filename
         self.cwd = cwd
     def add(self):
-        orginalFiles = initialise.initialise.
+        with open
 
 

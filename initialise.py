@@ -5,25 +5,43 @@
 #imports
 import os
 import shelve
-orginalDirs = list()
+# orginalDirs = list()
 class initialise:
-    def __init__(self, filePath):
-        self.filePath = filePath
-        os.chdir(filePath)
+    def __init__(self, cwd):
+        self.cwd = cwd
+    #start method
+    #==> initialise.start()
+    def start(self, cwd):
+        os.chdir(cwd)
+        dir_shelve_path = "dirs_shelve.txt"
+        filename_shelve_path = "filenames_shelve_path.txt"
+        if os.path.exists(dir_shelve_path):
+            pass
+        else:
+            os.mkdir(dir_shelve_path)
+        if os.path.exists(filename_shelve_path):
+            pass
+        else:
+            os.mkdir(filename_shelve_path)
+        dirs = initialise.dirCacher(cwd)
+        fileCaches = initialise.fileCahcer(cwd)
+        #shelve contents of all lists to be used by add.
+        dirShelf = shelve.open(dir_shelve_path)
+        dirShelf['dir'] = dirs
+        dirShelf.close()
+        fileCachesShelf = shelve.open(filename_shelve_path)
+        fileCachesShelf['fileCaches'] = fileCaches
+        fileCachesShelf.close()
+
     #method to find all files in file path
     def dirCacher(self, cwd):
-        global orginalDirs
-        self.cwd = cwd
         os.chdir(cwd)
         orginal_dirs = list()
         for folder, subfolder, file in os.walk():
             orginal_dirs.append(folder)
             orginal_dirs.append(file)
             orginal_dirs.append(file)
-            orginalDirs.append(folder)
-            orginalDirs.append(file)
-            orginalDirs.append(file)
-        return orginalDirs
+        return orginal_dirs
     #method to cache all contents of files
     def cache(self, filename):
         self.filename = filename
@@ -37,7 +55,8 @@ class initialise:
             f.close()
 
 
-    def fileCahcer(self):
+    def fileCahcer(self, cwd):
+
         all_dir = os.listdir()
         filenames =  list()
         for i in range(len(all_dir)):
@@ -48,3 +67,5 @@ class initialise:
         #cache contents
         for i in range(len(filenames)):
             initialise.cache(filenames[i])
+        return filenames
+

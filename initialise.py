@@ -47,6 +47,7 @@ class initialise:
         return orginal_dirs
     #method to cache all contents of files
     def cache(self, filename):
+        lines = list()
         self.filename = filename
         cacheFile = "cacheFile.txt"
         with open(filename, 'r') as f:

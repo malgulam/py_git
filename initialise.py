@@ -14,6 +14,7 @@ class initialise:
 
         #creating cache dirs
         self.cwd = cwd
+        print(self.cwd)
         cacheDir = "CacheDir/"
         if os.path.exists(os.path.join(cwd, cacheDir)):
             pass
@@ -35,13 +36,13 @@ class initialise:
     def dirCacher(self, cwd):
         self.cwd = cwd
         dirs = list()
-        for root, dir, files in os.walk('.', topdown=False):
+        for root, dir, files in os.walk(self.cwd, topdown=False):
             dirs.append(dir)
         return dirs
     def filesCacher(self, cwd):
         cwd = self.cwd
         filenames = list()
-        for root, dir, file in os.walk('.', topdown=False):
+        for root, dir, file in os.walk(self.cwd, topdown=False):
             filenames.append(file)
         return filenames
 

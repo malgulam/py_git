@@ -37,8 +37,8 @@ class initialise:
         fileCachesShelf = shelve.open(str(filename_shelve_path)+'filenamescache')
         fileCachesShelf['fileCaches'] = fileCaches
         fileCachesShelf.close()
-        paths.append(dir_shelve_path, filename_shelve_path)
-        return paths
+        # paths.append(dir_shelve_path, filename_shelve_path)
+        return dir_shelve_path, filename_shelve_path
 
     # TODO: handle caching of all current files, folders and subfolders
     # TODO:set return type to multi return eg.) return dirlist, filenameslist
@@ -46,57 +46,74 @@ class initialise:
 
     def dirCacher(self,cwd):
         original_dirs = list()
-        for root, dirs, files in os.walk(os.getcwd(), topdown=False):
+        for root, dirs, files in os.walk(".", topdown=False):
             dirs.append(dirs)
         return original_dirs
 
     #TODO: copy the below method into line 61 as a code bloc
     def cacher(self, cwd, filename):
-        cacher_file = str(filename) +"_chacheFile.txt"
-        #TODO: MAKE A CACHER DIR
-        CacherDirPath = "CacherDir/"
+        #TODO: find more efficient way to iterate through characters
+        #Todo:to find last dot to find file extension
+        # dotList = []
+        # for i in range(len(filename)):
+        #     if filename[i] == ".":
+        #         dotList.append(i)
+        #     else:
+        #         pass
+        # newFilename_without_extension = f"{filename[:dotList[-1]]}"
+        # cacherFile_name = f"{newFilename_without_extension}_cacheFile.txt"
+        # cacherDirPATH = "CacherDir/"
+        # lines = list()
+        # with open(f"{cwd}/{filena}")
+        dotList = list()
         lines = list()
-        with open(f"{cwd}/{filename}",  "r") as f:
-            lines = f.readlines()
-        f.close()
-        #TODO: wite to the file in the cacher dir with the same name as original
-        #todo: file but ends with _cacheFile.txt
-        # if os.path.exists(CacherDirPath):
+        #get actual filename
+        for i in range(len(filename)):
+            if filename[i] == ".":
+                dotList.append(i)
+            else:
+                pass
+        #TODO: make try except block for cachedir
+        dirs_list = list()
+        cacheDirPath = "CacheDir/"
+        # try:
+        #     os.mkdir(cacheDirPath)
+        # except FileExistsError:
         #     pass
-        # else:
-        #     print("does not exists")
-        #     os.mkdir(str(cwd)+CacherDirPath)
-        # with open(str(CacherDirPath)+cacher_file, "w+") as f:
-        #     f.write(lines)
-        # f.close()
-        if os.path.exists(str(cwd)+'/'+CacherDirPath):
-            pass
+        # except OSError as e:
+        if os.path.exists(cwd+cacheDirPath):
+            os.mkdir(os.path.join(cwd, cacheDirPath))
         else:
-            os.mkdir(str(cwd)+'/'+CacherDirPath)
-        f =open(str(cwd)+'/'+CacherDirPath+cacher_file, "w")
-        f.write(lines)
+            pass
+        print(filename)
+        cache_filename = f'{filename[:dotList[-1]]}_cacheFile.txt'
+        for root, subfolder, file in os.walk(cwd, topdown=False):
+            dirs_list.append(subfolder)
+        #checking whether file exists
+        for i in range(len(dirs_list)):
+            # os.path.join(dirs_list[i], filename)
+            if os.path.exists(f"{dirs_list[i]}/{filename}"):
+                with open(os.path.join(dirs_list[i], filename), "r") as f:
+                    lines = f.readlines()
+                f.close()
+            else:
+                pass
+        with open(cache_filename, "w+") as f:
+            for i in range(len(lines)):
+                f.write(lines[i])
         f.close()
 
     def file_content_cacher(self, cwd, filenames, dirs):
-        #TODO:search for files dir,  copy the content
         for files in filenames:
-            #Todo: iterate through original_dirs to find if when con
-            #cancerated the file path exists
-            # for dir in dirs:
-            #     for i in range(len(filenames)):
-            #         if os.path.exists(os.path.join(dir, filenames[i])):
-            #             initialise().cacher(cwd=cwd, filename=str(dir)+"/"+str(filenames[i]))
-            #         else:
-            #             pass
             for i in range(len(dirs)):
-                if os.path.isfile(os.path.join(dirs[i], files)):
+                if os.path.exists(f"{dirs[i]}/{files})"):
                     accepted_path = str(dirs[i])+"/"+str(files)
                     initialise().cacher(cwd=cwd, filename=accepted_path)
                 else:
                     pass
 
 
-        #TODO:create file to write cached content into
+
     def fileCacher(self, cwd):
         original_files = list()
         dirs = list()

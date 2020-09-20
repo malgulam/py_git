@@ -8,8 +8,6 @@ import shelve
 # orginalDirs = list()
 class initialise:
     def __init__(self):
-        #TODO: REMIND USER TO SET ORIGINAL_FILES, ORIGINAL_DIRS TO NULL
-        #TODO:Find something to do here
         self = self
 
     #start method
@@ -40,31 +38,14 @@ class initialise:
         # paths.append(dir_shelve_path, filename_shelve_path)
         return dir_shelve_path, filename_shelve_path
 
-    # TODO: handle caching of all current files, folders and subfolders
-    # TODO:set return type to multi return eg.) return dirlist, filenameslist
-    # TODO: handle this new return type in the start method
-
     def dirCacher(self,cwd):
         original_dirs = list()
         for root, dirs, files in os.walk(".", topdown=False):
             dirs.append(dirs)
         return original_dirs
 
-    #TODO: copy the below method into line 61 as a code bloc
+
     def cacher(self, cwd, filename):
-        #TODO: find more efficient way to iterate through characters
-        #Todo:to find last dot to find file extension
-        # dotList = []
-        # for i in range(len(filename)):
-        #     if filename[i] == ".":
-        #         dotList.append(i)
-        #     else:
-        #         pass
-        # newFilename_without_extension = f"{filename[:dotList[-1]]}"
-        # cacherFile_name = f"{newFilename_without_extension}_cacheFile.txt"
-        # cacherDirPATH = "CacherDir/"
-        # lines = list()
-        # with open(f"{cwd}/{filena}")
         dotList = list()
         lines = list()
         #get actual filename
@@ -73,7 +54,7 @@ class initialise:
                 dotList.append(i)
             else:
                 pass
-        #TODO: make try except block for cachedir
+
         dirs_list = list()
         cacheDirPath = "CacheDir/"
         # try:

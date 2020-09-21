@@ -61,7 +61,8 @@ class add:
         self.agrc = int(len(sys.argv))
         if self.agrc <= 1:
             print("Argument passed should be greater than 1")
-            print("Format: python3 PyGit.main.add.add(cwd=os.path.dirname(os.path.realpath(__file__))) {filename} \\ python3 PyGit.main.add.add(cwd=os.path.dirname(os.path.realpath(__file__))) .")
+            #print("Format: python3 PyGit.main.add.add(cwd=os.path.dirname(os.path.realpath(__file__))) {filename} \\ python3 PyGit.main.add.add(cwd=os.path.dirname(os.path.realpath(__file__))) .")
+            print("Format: python3 add.py 'filename' ")
         else:
             pass
 

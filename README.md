@@ -9,6 +9,6 @@ eg.)import pygit
 #
 pygit.pygit_vc(f"{this_file's_name}")
 
-You will be given prompts.Respond accrodingly.
+You will be given prompts.Respond accordingly.
 
 Much contribution will be needed.Thanks in advance. :]

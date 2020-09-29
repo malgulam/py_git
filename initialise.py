@@ -20,6 +20,7 @@ class initialise:
             #cache dir already present
             pass
         #making cachedb
+        # files_dirsCache = f"{cwd}/{cachedDir}F_DCache.db"
         files_dirsCache = f"{cachedDir}F_DCache.db"
         try:
             open(files_dirsCache, 'a').close()
@@ -49,17 +50,24 @@ class initialise:
         except sqlite3.Error as e:
             print(e)
         try:
+            #todo:create function to detect whether os.walk returns nested list
             # inserting data
             # inserting the roots
             for i in range(len(roots)):
-                for root in roots[i]:
-                    c.execute(f"INSERT INTO dirs_files(Roots) VALUES(?)", (root,))
+                print('Indexing root dirs into db...')
+                initialise.progressBar(i, len(roots))
+                # for root in roots[i]:
+                c.execute(f"INSERT INTO dirs_files(Roots) VALUES(?)", (roots[i],))
             # inserting dirs
             for i in range(len(dirs)):
+                print('Indexing real dirs into db...')
+                initialise.progressBar(i, len(dirs))
                 for dir in dirs[i]:
                     c.execute(f"INSERT INTO dirs_files(Dirs) VALUES(?)", (dir,))
             # inserting files
             for i in range(len(files)):
+                print('Indexing files into db...')
+                initialise.progressBar(i, len(files))
                 for file in files[i]:
                     c.execute(f"INSERT INTO dirs_files(Files) VALUES(?)", (file,))
             conn.commit()
@@ -116,17 +124,21 @@ class initialise:
             pass  # find fix
         # getting true paths of files
         valid_file_paths = initialise.pathFinder(self,fileList=FILES, dirsList=DIRS, cwd=cwd)
-        print(valid_file_paths)
+        # print(valid_file_paths)
         for path in valid_file_paths:
+            print('Indexing valid paths into db...')
+            initialise.progressBar(valid_file_paths.index(path), len(valid_file_paths))
             c.execute('''SELECT CachedPaths FROM dirs_files''')
             c.execute(f"INSERT INTO dirs_files(CachedPaths) VALUES(?)", (path,))
             conn.commit()
         conn.close()
         for file in valid_file_paths:
+            print('CACHING FILE CONTENTS')
+            initialise.progressBar(valid_file_paths.index(file), len(valid_file_paths))
             lines = list()
             # cacheFilename = f"{cwd}/{cachedDir}{file}_cache.txt"
             cacheFilename =f'{cwd}/{cachedDir}'+str(initialise.generateCacheFilename(self, file=file))+'_cached.txt'
-            print(f'CACHEFILENAME:{cacheFilename}')
+            # print(f'CACHEFILENAME:{cacheFilename}')
             # reading content of file
             try:
                 with open(file, "r") as f:
@@ -153,11 +165,13 @@ class initialise:
         self.cwd = cwd
         # todo: use for file in filelist
         validPaths = list()
+        print('RETRIEVING VALID PATHS')
         for i in range(len(fileList)):
+            initialise.progressBar(i, len(fileList))
             for file in fileList[i]:
                 for i in range(len(dirsList)):
                     for dir in dirsList[i]:
-                        print(f"CWD:{cwd}")
+                        # print(f"CWD:{cwd}")
                         path = f"{cwd}/{dir}/{file}"
                         if os.path.exists(path):  # same base code from previous code
                             validPaths.append(
@@ -165,6 +179,16 @@ class initialise:
                         else:
                             pass
         return validPaths
+
+    def convertToSingleList(list=None):
+        tmpLst = list()
+
+    def progressBar(current, total, barLength=20):
+        percent = float(current) * 100 / total
+        arrow = '-' * int(percent / 100 * barLength - 1) + '>'
+        spaces = ' ' * (barLength - len(arrow))
+        print('Progress: [%s%s] %d %%' % (arrow, spaces, percent), end='\r')
+
 
 
 

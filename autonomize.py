@@ -13,8 +13,6 @@ class autonomize:
     def autonomize(self, cwd):
         # START OF PROGRAM
         #run autonomize
-        # print(positionStr, end='')
-        # print('\b' * len(positionStr), end='', flush=True)
         #database declarations
         cachedDir = "Caches/"
         dbfile = 'F_DCache.db'
@@ -135,7 +133,7 @@ class autonomize:
             print('Want to create db? Y\\N: ', end='')
             opt =  str(input())
             if opt.lower() == 'y':
-                initialise.initialise(self, cwd=os.path.dirname(os.path.realpath(__file__)))
+                initialise.initialise(self, cwd=os.getcwd())
                 print('DONE!\nRestart the compiler sequence.')
             elif opt.lower() == 'n':
                 print('ABORTED!')

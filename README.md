@@ -1,3 +1,4 @@
+
 # PyGit
 Python Git VC Tool.
 This package acts as a version control tool that helps python developers to create,edit,etc from within the program itself.
@@ -18,6 +19,5 @@ NB:1.)Use initialise script on first run to cache all required files, folders an
 5.)Check out pypi @druzgeorge @agulam-coco
 
 
-You will be given prompts.Respond accordingly.
 
 Much contribution will be needed.Thanks in advance. :]

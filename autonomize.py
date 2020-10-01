@@ -7,10 +7,35 @@ import difflib
 import time
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 from initialise import  initialise
+# from initialise import valid
 class autonomize:
     def __init__(self):
         self = self
+    @staticmethod
+    def compare(self, filename, cacheDIR):
+        self.filename = filename
+        self.cacheDIR = cacheDIR
+        # working with tuple objects so need only specific items
+        #todo: function to generate cache file/ get filename
+        # generateCacheFilename(self, file=None):
+        # cache_of_file = f'{filename}_cached.txt'
+        cache_of_file = initialise.generateCacheFilename(self, file=filename)
+        cache_of_file_path = f'/{self.cwd}/{self.cacheDIR}/{cache_of_file}'
+        print(f'CACHEFILE:{cache_of_file_path}')
+        file_lines = list()
+        cache_line = list()
+        print(f'FILENAME:{filename}')
+        with open(filename, 'r') as f:
+            file_lines = f.readlines()
+        f.close()
+        with open(cache_of_file_path, 'r') as f:
+            cache_line = f.readlines()
+        f.close()
+        print(f'DIFFERENCES FOUND BETWEEN {filename} and {cache_of_file_path}')
+        sys.stdout.writelines(difflib.context_diff(file_lines, cache_line))
+
     def autonomize(self, cwd):
+        self.cwd = cwd
         # START OF PROGRAM
         #run autonomize
         #database declarations
@@ -93,31 +118,17 @@ class autonomize:
                         RootChangesLst.append(root)
                     else:
                         pass
-                # todo:function to compare contents of files
                 # checking the contents of files
+                print(f'FILESREVIEW:{FilesReview}')
                 valid_file_paths = initialise.pathFinder(self, fileList=FilesReview, dirsList=originalDir, cwd=cwd)
                 # print(f"FILENAMELISTS:{FilesReview}")
-                for i in range(len(valid_file_paths)):
-                    autonomize.compare(self, filename=valid_file_paths[i], cacheDIR=cachedDir)
-
-            def compare(self, filename, cacheDIR):
-                self.filename = filename
-                self.cacheDIR = cacheDIR
-                # working with tuple objects so need only specific items
-                cache_of_file = f'{filename}_cached.txt'
-                print(f'CACHEFILE:{cache_of_file}')
-                file_lines = list()
-                cache_line = list()
-                print(f'FILENAME:{filename}')
-                with open(filename, 'r') as f:
-                    file_lines = f.readlines()
-                f.close()
-                with open(cache_of_file, 'r') as f:
-                    cache_line = f.readlines()
-                f.close()
-                print(f'DIFFERENCES FOUND BETWEEN {filename} and {cache_of_file}')
-                sys.stdout.writelines(difflib.context_diff(file_lines, cache_line))
-
+                # for i in range(len(valid_file_paths)):
+                #     autonomize.compare(self, filename=valid_file_paths[i], cacheDIR=cachedDir)
+                for path in valid_file_paths:
+                    try:
+                        autonomize.compare(self, filename=path,cacheDIR=cachedDir)
+                    except FileNotFoundError:
+                        print('File not found.Hm!')
         except sqlite3.OperationalError as e:
             print('Seems there\'s no db present')
             time.sleep(0.5)
@@ -134,6 +145,7 @@ class autonomize:
             opt =  str(input())
             if opt.lower() == 'y':
                 initialise.initialise(self, cwd=os.getcwd())
+                # initialise.__init__(self=self, cwd=os.getcwd()).initialise()
                 print('DONE!\nRestart the compiler sequence.')
             elif opt.lower() == 'n':
                 print('ABORTED!')

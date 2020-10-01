@@ -6,7 +6,7 @@
 ```python
 import PyGit
 from PyGit import initialise, autonomize
-!#/usr/python3
+#!/usr/python3
 def something():
     #autonomize.autonomize().autonomize(cwd=os.path.dirname(os.path.realpath(__file__)))
     #initialise.initialise().initialise(cwd=os.path.dirname(os.path.realpath(__file__)))

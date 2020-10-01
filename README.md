@@ -4,6 +4,7 @@
 ### This package acts as a version control tool that helps python developers to create,edit,etc from within the program itself.
 
 ```python
+from sys.path.append('.')
 import PyGit
 from PyGit import initialise, autonomize
 #!/usr/python3

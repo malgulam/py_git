@@ -15,7 +15,7 @@ NB:1.)Use initialise script on first run to cache all required files, folders an
 2.)Fix 'touch command' in 'initialise.py' line 38
 3.)Create  an sqlie3 condition to avoid caching files, dirs, roots, valid paths which  have already been cached in F_DCache.db again.
 4.)Contribute!
-5.)Check out pypi @druzgeorge
+5.)Check out pypi @druzgeorge @agulam-coco
 
 
 You will be given prompts.Respond accrodingly.

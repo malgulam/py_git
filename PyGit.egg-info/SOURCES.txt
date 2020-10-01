@@ -1,6 +1,0 @@
-README.md
-setup.py
-PyGit.egg-info/PKG-INFO
-PyGit.egg-info/SOURCES.txt
-PyGit.egg-info/dependency_links.txt
-PyGit.egg-info/top_level.txt

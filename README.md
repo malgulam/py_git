@@ -18,6 +18,6 @@ NB:1.)Use initialise script on first run to cache all required files, folders an
 5.)Check out pypi @druzgeorge @agulam-coco
 
 
-You will be given prompts.Respond accrodingly.
+You will be given prompts.Respond accordingly.
 
 Much contribution will be needed.Thanks in advance. :]

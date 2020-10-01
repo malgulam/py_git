@@ -35,7 +35,6 @@ class initialise:
         if os.path.exists(db_file):
             pass
         else:
-            # os.system('touch %s' %db_file)
             os.system(f'touch %s' % db_file)
 
         # lists for db commits

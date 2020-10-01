@@ -1,6 +1,0 @@
-README.md
-setup.py
-PyGit_druzgeorge.egg-info/PKG-INFO
-PyGit_druzgeorge.egg-info/SOURCES.txt
-PyGit_druzgeorge.egg-info/dependency_links.txt
-PyGit_druzgeorge.egg-info/top_level.txt

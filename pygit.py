@@ -1,12 +1,8 @@
 #imports
-
+import os, sys
+sys.path.append('.')
+import initialise, autonomize
 #pygit main class
-class pygit(object)
-    def __init__(self):
-        self = self
-    @classmethod
-    def clone(cls, origin_uri):
-        pass
-    @staticmethod
-    def initialise(self, cwd):
-        
+class pygit():
+    # @classmethod
+    pass

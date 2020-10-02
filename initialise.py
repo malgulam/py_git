@@ -85,7 +85,7 @@ class initialise:
         files = tmplst[:]
         tmp *= 0
         tmplst.clear()
-        print(f'ROOTS:{roots}-DIRS:{dirs}-FILES:{files}')
+        # print(f'ROOTS:{roots}-DIRS:{dirs}-FILES:{files}')
         # creating db tables
         global conn
         print(db_file)
@@ -229,6 +229,7 @@ class initialise:
         db_files = tmplst[:]
         tmplst *= 0
         valid_file_paths = initialise.pathFinder(self, fileList=db_files, dirsList=db_dirs, cwd=self.cwd)
+        #inserting valid paths into database
         for path in valid_file_paths:
             print('Indexing valid paths into db...')
             initialise.progressBar(valid_file_paths.index(path), len(valid_file_paths))
@@ -242,7 +243,7 @@ class initialise:
             lines = list()
             # cacheFilename = f"{cwd}/{cachedDir}{file}_cache.txt"
             cacheFilename = f'{cached_path}' + str(initialise.generateCacheFilename(self, file=valid_file_paths[valid_file_paths.index(file_path)])) + '_cached.txt'
-            print(f'CACHEFILENAME:{cacheFilename}')
+            # print(f'CACHEFILENAME:{cacheFilename}')
             # print(f'CACHEFILENAME:{cacheFilename}')
             # reading content of file
             try:

@@ -40,90 +40,90 @@ class autonomize:
         dbfile = 'F_DCache.db'
         db = f'{cwd}/{cachedDir}{dbfile}'
         try:
-            while True:
-                # lists declarations
-                filenamesLst = list()
-                dirsLst = list()
-                rootsLst = list()
-                updatedFilnames = list()
-                updatedDirs = list()
-                updatedRoots = list()
-                FileChangesLst = list()
-                DirChangesLst = list()
-                RootChangesLst = list()
-                FilesReview = list()  # this list stores all the filenames which have not changed.Their contents will be reviewd with the cached ones.
+            # while True:
+            # lists declarations
+            filenamesLst = list()
+            dirsLst = list()
+            rootsLst = list()
+            updatedFilnames = list()
+            updatedDirs = list()
+            updatedRoots = list()
+            FileChangesLst = list()
+            DirChangesLst = list()
+            RootChangesLst = list()
+            FilesReview = list()  # this list stores all the filenames which have not changed.Their contents will be reviewd with the cached ones.
 
-                #updating all update lists
-                for root, dir, file in os.walk(cwd, topdown=False):
-                    updatedRoots.append(root)
-                    updatedDirs.append(dir)
-                    updatedFilnames.append(file)
-                #connecting to db
-                conn = sqlite3.connect(db)
-                c = conn.cursor()
-                #RETRIEVING ORIGINAL FILES FROM DB
-                c.execute('''SELECT Files FROM dirs_files''')
-                tmplst = c.fetchall()
-                for i in range(len(tmplst)):
-                    for j in range(len(tmplst[i])):
-                        if tmplst[i][j] != None:
-                            filenamesLst.append(tmplst[i][j])
-                        else:
-                            pass
-                del tmplst[:]  # can also use tmplst.clear()
-                # print(f"FILENAMELST:{filenamesLst}")
-                # print(f'UPDATEDFILENAMES: {updatedFilnames}')
-                for i in range(len(updatedFilnames)):
-                    for filename in updatedFilnames[i]:
-                        # returns tuple so retriving tuple objects which are not None
-                        # for j in range(len(filename)):
-                        if filename != None:
-                            if filename not in filenamesLst:
-                                FileChangesLst.append(filename)
-                            else:
-                                FilesReview.append(filename)
-                        else:
-                            pass
-
-                # retrieving original folders
-                c.execute('''SELECT Dirs FROM dirs_files''')
-                tmplst = c.fetchall()
-                for i in range(len(tmplst)):
-                    for j in range(len(tmplst[i])):
-                        if tmplst[i][j] != None:
-                            dirsLst.append(tmplst[i][j])
-                        else:
-                            pass
-                tmplst[:]
-                originalDir = list()
-                for i in range(len(updatedDirs)):
-                    for dir in updatedDirs[i]:
-                        # returns tuple.Want to append just the contents
-                        if dir != None:
-                            if dir not in dirsLst:
-                                DirChangesLst.append(dir)
-                            else:
-                                originalDir.append(dir)
-                        else:
-                            pass
-
-                #Retrieving roots from db
-                c.execute('''SELECT Roots FROM dirs_files''')
-                rootsLst = c.fetchall()
-                for root in updatedRoots:
-                    if root not in rootsLst:
-                        RootChangesLst.append(root)
+            #updating all update lists
+            for root, dir, file in os.walk(cwd, topdown=False):
+                updatedRoots.append(root)
+                updatedDirs.append(dir)
+                updatedFilnames.append(file)
+            #connecting to db
+            conn = sqlite3.connect(db)
+            c = conn.cursor()
+            #RETRIEVING ORIGINAL FILES FROM DB
+            c.execute('''SELECT Files FROM dirs_files''')
+            tmplst = c.fetchall()
+            for i in range(len(tmplst)):
+                for j in range(len(tmplst[i])):
+                    if tmplst[i][j] != None:
+                        filenamesLst.append(tmplst[i][j])
                     else:
                         pass
-                # checking the contents of files
-                print(f'FILESREVIEW:{FilesReview}')
-                valid_file_paths = initialise.pathFinder(self, fileList=FilesReview, dirsList=originalDir, cwd=cwd)
-                for path in valid_file_paths:
-                    try:
-                        autonomize.compare(self, filename=path,cacheDIR=cachedDir)
-                    except FileNotFoundError:
-                        print(f'File not found.Hm!: {path}')
-                        break
+            del tmplst[:]  # can also use tmplst.clear()
+            # print(f"FILENAMELST:{filenamesLst}")
+            # print(f'UPDATEDFILENAMES: {updatedFilnames}')
+            for i in range(len(updatedFilnames)):
+                for filename in updatedFilnames[i]:
+                    # returns tuple so retriving tuple objects which are not None
+                    # for j in range(len(filename)):
+                    if filename != None:
+                        if filename not in filenamesLst:
+                            FileChangesLst.append(filename)
+                        else:
+                            FilesReview.append(filename)
+                    else:
+                        pass
+
+            # retrieving original folders
+            c.execute('''SELECT Dirs FROM dirs_files''')
+            tmplst = c.fetchall()
+            for i in range(len(tmplst)):
+                for j in range(len(tmplst[i])):
+                    if tmplst[i][j] != None:
+                        dirsLst.append(tmplst[i][j])
+                    else:
+                        pass
+            tmplst[:]
+            originalDir = list()
+            for i in range(len(updatedDirs)):
+                for dir in updatedDirs[i]:
+                    # returns tuple.Want to append just the contents
+                    if dir != None:
+                        if dir not in dirsLst:
+                            DirChangesLst.append(dir)
+                        else:
+                            originalDir.append(dir)
+                    else:
+                        pass
+
+            #Retrieving roots from db
+            c.execute('''SELECT Roots FROM dirs_files''')
+            rootsLst = c.fetchall()
+            for root in updatedRoots:
+                if root not in rootsLst:
+                    RootChangesLst.append(root)
+                else:
+                    pass
+            # checking the contents of files
+            # print(f'FILESREVIEW:{FilesReview}')
+            valid_file_paths = initialise.pathFinder(self, fileList=FilesReview, dirsList=originalDir, cwd=cwd)
+            for path in valid_file_paths:
+                try:
+                    autonomize.compare(self, filename=path,cacheDIR=cachedDir)
+                except FileNotFoundError:
+                    print(f'File not found.Hm!: {path}')
+                    break
         except sqlite3.OperationalError as e:
             print('Seems there\'s no db present')
             time.sleep(0.5)

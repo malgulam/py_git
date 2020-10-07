@@ -236,10 +236,7 @@ class initialise:
             print('CACHING FILE CONTENTS...')
             initialise.progressBar(valid_file_paths.index(file_path), len(valid_file_paths))
             lines = list()
-            # cacheFilename = f"{cwd}/{cachedDir}{file}_cache.txt"
             cacheFilename = f'{cached_path}' + str(initialise.generateCacheFilename(self, file=valid_file_paths[valid_file_paths.index(file_path)])) + '_cached.txt'
-            # print(f'CACHEFILENAME:{cacheFilename}')
-            # print(f'CACHEFILENAME:{cacheFilename}')
             # reading content of file
             try:
                 with open(file_path, "r") as f:
@@ -255,7 +252,7 @@ class initialise:
                 print(file_path)
                 pass
             except UnicodeDecodeError as e:
-                # todo: find fix.
+                # todo: FIX!.
                 print("Encountered UnicodeDecode error")
                 print(file_path)
 

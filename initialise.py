@@ -17,7 +17,7 @@ class initialise:
     def initialise(self, cwd):
         self.cwd = cwd + '/'
         # createCache dir
-        cachedDir = 'Caches/'
+        cachedDir = '.Caches/'
         cachedDir_path = str(self.cwd)+str(cachedDir)
         # checking whether the db dir exists, if not create it
         if os.path.exists(cachedDir_path):
@@ -25,12 +25,9 @@ class initialise:
         else:
             os.mkdir(cachedDir_path)
         # makng cachedb
-        # db_foldername = ('Caches/')
-        db_filename = ('F_DCache.db')
-        # db_path = str(self.cwd)+str(db_foldername)+db_filename
+        db_filename = ('PyGitDB.db')
         db_path = str(cachedDir_path)+ db_filename
         db_file = db_path
-        # db_file = f"{cwd}/{cachedDir}F_DCache.db"
         print(db_file)
         if os.path.exists(db_file):
             pass
@@ -85,8 +82,6 @@ class initialise:
         files = tmplst[:]
         tmp *= 0
         tmplst.clear()
-        # print(f'ROOTS:{roots}-DIRS:{dirs}-FILES:{files}')
-        # creating db tables
         global conn
         print(db_file)
         conn = sqlite3.connect(db_file)

@@ -22,14 +22,18 @@ class autonomize:
         self.file_lines = list()
         self.cache_line = list()
         print(f'FILENAME:{filename}')
-        with open(filename, 'r') as f:
-            self.file_lines = f.readlines()
-        f.close()
-        with open(cache_of_file_path, 'r') as f:
-            self.cache_line = f.readlines()
-        f.close()
-        print(f'DIFFERENCES FOUND BETWEEN {filename} and {cache_of_file_path}')
-        sys.stdout.writelines(difflib.context_diff(self.file_lines, self.cache_line))
+        try:
+            with open(filename, 'r') as f:
+                self.file_lines = f.readlines()
+            f.close()
+            with open(cache_of_file_path, 'r') as f:
+                self.cache_line = f.readlines()
+            f.close()
+            print(f'DIFFERENCES FOUND BETWEEN {filename} and {cache_of_file_path}')
+            sys.stdout.writelines(difflib.context_diff(self.file_lines, self.cache_line))
+        except UnicodeDecodeError as e :
+            #todo: FIX!
+            pass
 
     def autonomize(self, cwd):
         self.cwd = cwd
@@ -146,4 +150,5 @@ class autonomize:
                 print('ABORTED!')
             else:
                 print('UNKNOWN COMMAND')
+
 

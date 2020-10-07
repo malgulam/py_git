@@ -1,8 +1,12 @@
 #imports
 import os, sys
 sys.path.append('.')
-import initialise, autonomize
-#pygit main class
-class pygit():
-    # @classmethod
+# from datetime import date
+# import initialise, autonomize
+#pygit main
+
+def main (cwd):
+    # tday = date.today()
+    # print(f'Started PyGit on {tday}')
+    # initialise.
     pass

@@ -1,4 +1,4 @@
-![Image of PyGit Logo](https://github.com/malgulam/PyGit/blob/master/PyGitLogo.png) 
+![Image of PyGit Logo](https://github.com/malgulam/PyGit/blob/master/pygit/PyGitLogo.png) 
 # PyGit
 ## Python Git-like VC Tool For Code Debug Purposes.
 ### This package acts as a version control tool that helps python developers to create,edit,modify and reformat code from within the program itself.

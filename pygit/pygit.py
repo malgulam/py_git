@@ -136,7 +136,7 @@ class Commands(object):
                 os.system("git pull")
                 os.system("git add .")
                 os.system("git status")
-                os.system(f"git commit -m '{commit_msg}.Pushed by automate_actions'")
+                os.system(f"git commit -m '{commit_msg}.Pushed with automate_actions'")
                 Commands.push(os.getcwd())
         else:
             return "Unknown action {}".format(action)

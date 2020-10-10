@@ -135,8 +135,8 @@ class Commands(object):
             if action == 'push':
                 os.system("git pull")
                 os.system("git add .")
-                os.system("git status")
-                os.system(f"git commit -m '{commit_msg}'.Pushed by automate_actions")
+                # os.system("git status")
+                os.system(f"git commit -m '{commit_msg}.Pushed by automate_actions'")
                 Commands.push(os.getcwd())
         else:
             return "Unknown action {}".format(action)

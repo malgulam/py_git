@@ -2,11 +2,12 @@
 import os
 import sys
 sys.path.append(os.getcwd())
-# from import Commands
+from colorit import *
 from pathlib import Path
 import argparse
 from subprocess import Popen, PIPE
 import shelve
+import shutil
 
 BASE_DIR = Path.home()
 DESKTOP = BASE_DIR / 'Desktop'
@@ -74,7 +75,7 @@ def get_commandline_arguments():
     "Print command_line_arguments help"
     try:
         parser = argparse.ArgumentParser(prog="pygit. Initialise pygit by running python3 pygit --init / -i {cwd}.Where cwd is the full path to the directory you want to initialise pygit in.")
-        parser.add_argument('-s_g_c', '--set_global_credentials', help="set global your credentials.\n"
+        parser.add_argument('-s_g_c', '--set_global_credentials', help="set global your credentials.Please use a developer's token as the password.\nFormat: python3 -m pygit --set_global_credentials username/password.\nExample:python3 -m pygit --set_global_credentials bobbyBoy/8whagdjeuanhdjd"
                                                                        "Advise you setup ssh method of git access with your pc to avoid usage.")
         parser.add_argument('-m', '--masterDir',  help="Full path to local git repo containining many other sub-directories")
         parser.add_argument('-a_a', '--automate_actions', help="Automates the process of performing simple git actions\nExample: --automate_actions[push, pull, fetch, commit]")
@@ -121,10 +122,7 @@ class Commands(object):
         elif  self.argument == 'push':
             Commands.push()
         elif self.argument == 'set_global_credentials':
-            #todo: add warning message to set_globals showing this option is not secure
-            #todo: let user pass passwords and username like 'username/password' so you can use .split(/) to
-            #todo: retrive both username and password from a declared list
-            Commands.set_globals()
+            Commands.set_globals(self.argument_content)
 
     @staticmethod
     def automate_actions(action, commit_msg="new changes"):
@@ -141,8 +139,41 @@ class Commands(object):
         else:
             return "Unknown action {}".format(action)
     @staticmethod
-    def set_globals():
-        pass
+    def set_globals(username_password):
+        # todo: add warning message to set_globals showing this option is not secure
+        # todo: let user pass passwords and username like 'username/password' so you can use .split(/) to
+        # todo: retrive both username and password from a declared list
+        #spliting username_password into a list separated by ','
+        credentials = str(username_password).split('/')
+        #making sure coloit will be usable in commandline interfaces
+        print(color_front("This is very dangerous!", red=255, green=0, blue=0))
+        print(color_front("Setting credentials to global is efficent but insecure.\nYour information will be stored in "
+                          f"{SHELF_DIR} as a shelve file.\nYou can proceed but it is advised to "
+                          f"setup SSH keys for your github to avoid using this.\nRead this:{color_front('https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account', red=0, green=255, blue=0)}"
+                          , red=255, green=0, blue=0))
+        opt = str(input(f"\n\nDO YOU WISH TO PROCEED? y(Y)es/n(N)o: ")).lower()
+        # print(opt.lower())
+        if opt == "y" or "yes":
+            print("Working...")
+            try:
+                Commands.safe_mkdir(SHELF_DIR)
+                shelveOBJ = shelve.open(SHELF_DIR)
+                shelveOBJ['gloabal_credentials'] = credentials[0]
+                shelveOBJ['global_credentials'].append(credentials[1])
+                shelveOBJ.close()
+            except FileExistsError:
+                shutil.rmtree(SHELF_DIR)
+                Commands.safe_mkdir(SHELF_DIR)
+                shelveOBJ = shelve.open(SHELF_DIR)
+                shelveOBJ['gloabal_credentials'] = credentials[0]
+                shelveOBJ['global_credentials'].append(credentials[1])
+                shelveOBJ.close()
+            print("Done...")
+            return
+        else:
+            print(color_front("Aborted!", red=255, green=0, blue=0))
+            print(color_front("Read: https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account \n On how to perform adding SSH key to account", red=0, green=150, blue=240))
+            sys.exit(1)
     @staticmethod
     def init():
         #todo: set path to cwd
@@ -157,6 +188,16 @@ class Commands(object):
     def push(path):
         print("Pushing new code")
         os.system("git push")
-
+    @staticmethod
+    def safe_mkdir(path):
+        print("Initialised safe_mkdir()\n Making dir in safe mode.")
+        if not os.path.exists(path):
+            os.mkdir(path)
+            print("Directory successfully created at {}".format(path))
+            return
+        shutil.rmtree(path)
+        os.mkdir(path)
+        print("Directory successfully created at {}".format(path))
+        return
 if __name__ == '__main__':
     initialise()

@@ -1,6 +1,8 @@
 #!/usr/bin/python3
-from .pygit import initialise
-
+import sys
+sys.path.append('.')
+import pygit
+from pygit import
 if __name__ == "__main__":
-    initialise()
+    pygit.initialise()
 

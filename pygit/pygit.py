@@ -1,102 +1,61 @@
-#! /usr/bin/python3.9
-
 #imports
 import os
-import platform
 import sys
-sys.path.append('.')
-from pygit import initialise
+sys.path.append(os.getcwd())
+# from import Commands
 from pathlib import Path
-from .exceptions import TrashPermissionError
-from send2trash import send2trash
 import argparse
-from subprocess import Popen, PIPE, STDOUT
+from subprocess import Popen, PIPE
 import shelve
-import shutil
-
 
 BASE_DIR = Path.home()
 DESKTOP = BASE_DIR / 'Desktop'
 SHELF_DIR = BASE_DIR / 'python-git-shelf'
-# STATUS_DIR = BASE_DIR / 'python-git-status'
 
-
-#check whether os supports / has git present
+#todo: fix winows support
+#initialise the program
 def initialise():
-    print('Initialising\npygit started')
-    try:
-        os.mkdir(SHELF_DIR)
-    except FileExistsError:
-        shutil.rmtree(SHELF_DIR)
-        Path.mkdir(SHELF_DIR)
-
-    args = get_command_line_arguments()
-    verbosity = args.verbosity
-    rules = args.rules
-    store_git_path(args.gitPath)
-    # shelve_master_directory(args.masterDirectory, rules)
-    # shelve_simple_directory(args.simpleDirectory)
-    #todo: set the initialize script to this
-
-    print('Indexing done')
-    return
-def store_git_path(git_path):
-    OS = detect_os()
-    if OS != None:
-        if git_exits(OS):
-            print('Your system has been configured for git...')
-        #working on windows machines
-        if 'windows' in str(os.system("uname -a")).lower():
-            path = retrieve_git_path(OS)
-            #strore in shelf location
-            SHELFDIROBJ = shelve.oepn(SHELF_DIR)
-            SHELFDIROBJ['OS_TYPE'] = 'windows'
-            SHELFDIROBJ['git_path'] = path
-            return
-
-        elif 'linux' or 'ubuntu' or 'x' in str(os.system("uname -a")).lower():
-            path = retrieve_git_path(OS)
-            # strore in shelf location
-            SHELFDIROBJ = shelve.oepn(SHELF_DIR)
-            SHELFDIROBJ['OS_TYPE'] = 'linux'
-            SHELFDIROBJ['git_path'] = path
-            return
-
-
-def retrieve_git_path(operating_system):
-    if 'linux' or 'ubuntu' or 'x' in str(operating_system).lower():
-        #pretty simple for linux
-        path = os.system("which  git")
-        return  path
-
-    if 'windows' in str(operating_system).lower():
-        executable = "git"
-        if os.path.sep in executable:
-            raise ValueError("Invalid filename: %s" %executable)
-        path = os.environ.get("PATH", "").split(os.pathsep)
-        #Use path text to dtermine extensis executables may have
-        path_exts = os.environ.get("PATHEXT", ".exe;.bat;.cmd").split(';')
-        has_ext = os.path.splitext(executable)[1] in path_exts
-        if not has_ext:
-            exts = path_exts
+    print('Initialising....')
+    #todo: search whether the git shelf is empty before doing all this to prevent annoying prompts
+    #check if system supports git
+    osType = detect_os()
+    if not git_exists(osType):
+        sys.exit(1)
+    print('System supports git!')
+    args = get_commandline_arguments()
+    #todo: if you make changes to commands list make changes to self.commands in the recognize_commands in class Commands:
+    push = args.push
+    set_global_credentials = args.set_global_credentials
+    masterDir = args.masterDir
+    automate_actions = args.automate_actions
+    clone = args.clone
+    init = args.init
+    commands = ['masterDir', "automate_actions", "clone", "init", "push", "set_global_credentials"]
+    commands_arg_content = [masterDir, automate_actions, clone, init, push, set_global_credentials]
+    for command_arg_content in commands_arg_content:
+        if command_arg_content:
+            #pass commands list the index fothe command_Arg_content item to get it's respective command
+            CommandsObj = Commands(commands[commands_arg_content.index(command_arg_content)],command_arg_content)
         else:
-            exts = [""]
-        for d in path:
-            try:
-                for ext in exts:
-                    exepath = os.path.join(d, executable + ext)
-                    if os.access(exepath, os.X_OK):
-                        return exepath
-            except OSError:
-                pass
+            pass
 
-            return None
-    return sys.exit(1)
-def git_exits(osType):
+
+
+def detect_os():
+    if os.name == "posix":
+        ostype = os.uname()[0]
+        print('OS: ', ostype)
+        return ostype
+    else:
+        print("unknown OS")
+        print('exiting...')
+        sys.exit(1)
+
+def git_exists(osType):
     if 'linux' or 'ubuntu' or 'x' in str(osType).lower():
-        msg = os.system('git --version')
-        if 'git version' in msg:
-            print('git exists!Yay!')
+        #in linux if you run os.system("git --version it prints git version and return code of 0")
+        msg = os.system("git --version")
+        if msg == 0:
             return True
         else:
             print('git not found on system.Exiting...')
@@ -107,42 +66,97 @@ def git_exits(osType):
         msg, _ = proc.communicate()
         msg = msg.decode('utf-8')
         if "git version" in msg:
+            print('git exists!Yay!')
             return True
         return False
 
+def get_commandline_arguments():
+    "Print command_line_arguments help"
+    try:
+        parser = argparse.ArgumentParser(prog="pygit. Initialise pygit by running python3 pygit --init / -i {cwd}.Where cwd is the full path to the directory you want to initialise pygit in.")
+        parser.add_argument('-s_g_c', '--set_global_credentials', help="set global your credentials.\n"
+                                                                       "Advise you setup ssh method of git access with your pc to avoid usage.")
+        parser.add_argument('-m', '--masterDir',  help="Full path to local git repo containining many other sub-directories")
+        parser.add_argument('-a_a', '--automate_actions', help="Automates the process of performing simple git actions\nExample: --automate_actions[push, pull, fetch, commit]")
+        parser.add_argument('-p', '--push', help='Push new code / builds to remote git repo')
+        parser.add_argument('-c', '--clone', help='Clone remote git repo.Example: python3 pygit.py --clone {url}\nDownload Path is set to default at Desktop')
+        parser.add_argument('-i', '--init', help='Initialise pygit in local repo.Example: python3 pygit --init {cwd}.Where cwd is the full path to the directory you want to initialise pygit in.')
+        return parser.parse_args()
+    except argparse.ArgumentError as e:
+        print('Unknown argument')
 
 
-def detect_os():
-    if os.name == "posix":
-        ostype = os.system("uname -a")
-        print(ostype)
-        return ostype
-    else:
-        print("unknown OS")
-        sys.exit(1)
-def get_command_line_arguments():
-    'Get command line argumets from terminal in unix based os/ cmd in windows'
-    parser = argparse.ArgumentParser(prog="pygit")
-    parser.add_argument("-v", "--verbosity", type=int, help="turn verbosity ON/OFF", choices=[0, 1])
-    parser.add_argument("-r", "--rules", help="Set a list of string patterns for folders to skip during setup",
-                        nargs='+')
-    parser.add_argument('-g', '--gitPath', help="Full pathname to git executable. cmd or bash.")
-    parser.add_argument('-m', '--masterDirectory', help="Full pathname to directory holding any number of git repos.")
-    parser.add_argument('-s', '--simpleDirectory',
-                        help="A list of full pathnames to any number of individual git repos.", nargs='+')
-    parser.add_argument('-h', '--help', help="Display help message.")
-    return parser.parse_args()
 
+#todo: create commands to deal with command related issues
 
-# commands class
-class Commands:
-    "Commands CLASS"
-    "HANDLES EXECUTION OF COMMANDS FROM COMMANDLINES"
-    #retrieving os type before carrying out further actions
-    SHELFOBJ = shelve.
-    os_type =
+class Commands(object):
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        else:
+            return False
     def __str__(self):
-        return "Commands: {}: {}".format(self.name, self.dir)
+        return ('Commands {} {}'.format(self.name,self.dir) )
 
-if __name__ == '__main__';
+    def __init__(self, argument, argument_content):
+        self.argument = argument
+        self.argument_content = argument_content
+        Commands.recognize_commands(self, self.argument, self.argument_content)
+    def recognize_commands(self, argument, argument_content):
+        self.argument = argument
+        self.argument_content = argument_content
+        print(self.argument, self.argument_content)
+        #below is a list of k,v items in a commands dict which maps each command to it's respectiive function!
+        # self.commands = {'masterDir':"index_master()", "automate_actions":"automate_actions()", "clone":"clone()", "init":"init()", "push":"push()", "set_global_credentials":"set_globals()"}
+        #todo: redirect every argument to it's static function
+        #redirecting to respective function
+        if self.argument == 'masterDir':
+            Commands.index_master()
+        elif self.argument == 'automate_actions':
+            Commands.automate_actions(action=self.argument_content)
+        elif self.argument == 'clone':
+            Commands.clone(url=self.argument_content)
+        elif self.argument == 'init':
+            Commands.init(cwd=self.argument_content)
+        elif  self.argument == 'push':
+            Commands.push()
+        elif self.argument == 'set_global_credentials':
+            #todo: add warning message to set_globals showing this option is not secure
+            #todo: let user pass passwords and username like 'username/password' so you can use .split(/) to
+            #todo: retrive both username and password from a declared list
+            Commands.set_globals()
+
+    @staticmethod
+    def automate_actions(action, commit_msg="new changes"):
+        #todo: set actions to all possible automate actions
+        actions = ['push', 'clone']
+        #if the action in actions ? redirect to distinct func : return error
+        if action in actions:
+            if action == 'push':
+                os.system("git pull")
+                os.system("git add .")
+                os.system("git status")
+                os.system(f"git commit -m '{commit_msg}'.Pushed by automate_actions")
+                Commands.push(os.getcwd())
+        else:
+            return "Unknown action {}".format(action)
+    @staticmethod
+    def set_globals():
+        pass
+    @staticmethod
+    def init():
+        #todo: set path to cwd
+        os.system()
+    @staticmethod
+    def index_master():
+        pass
+    @staticmethod
+    def clone(url, path=DESKTOP):
+        os.system("git clone {}".format(url))
+    @staticmethod
+    def push(path):
+        print("Pushing new code")
+        os.system("git push")
+
+if __name__ == '__main__':
     initialise()

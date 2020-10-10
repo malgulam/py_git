@@ -8,8 +8,8 @@
 ```bash
 bash terminal 
 ---------------------------------------------------------------------------------------------------
-$ python3 -m pygit --automate_actions=Push(path='/home/{__usr__}/{__current_repo_local_dir_name}')
-$ python3 -m pygit --automate_actions=Push(path='/home/jake/ImageDownloader')
+$ python3 -m pygit --automate_actions push
+$ python3 -m pygit --automate_actions push
 ```
  - The above bash code helps the developer effortlessly push new code / builds to Github with little to no further
  input.

@@ -21,6 +21,7 @@ class WindowsSupport(object):
         WindowsSupport.recognize_commands(self, self.argument, self.argument_content)
     #boolean function
     def retrieve_windows_git_path():
+        print()
         pass
     def recognize_commands(self, argument, argument_content):
         self.argument = argument

@@ -1,5 +1,5 @@
 ![Image of PyGit Logo](https://github.com/malgulam/PyGit/blob/master/pygit/PyGitLogo.png) 
-# PyGit
+# py_git
 ## Python Git-like VC Tool For Pythonic Git Actions.
 ### Essentially: Pythonically Git
  -  PyGit is a python package / module that helps developers get the best out of Git, quickly and effeciently. 

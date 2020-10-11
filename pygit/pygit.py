@@ -29,8 +29,9 @@ def initialise():
     automate_actions = args.automate_actions
     clone = args.clone
     init = args.init
-    commands = ['masterDir', "automate_actions", "clone", "init", "push", "set_global_credentials"]
-    commands_arg_content = [masterDir, automate_actions, clone, init, push, set_global_credentials]
+    add = args.add
+    commands = ['masterDir', "automate_actions", "clone", "init", "push", "set_global_credentials", "add"]
+    commands_arg_content = [masterDir, automate_actions, clone, init, push, set_global_credentials, add]
     for command_arg_content in commands_arg_content:
         if command_arg_content:
             #pass commands list the index fothe command_Arg_content item to get it's respective command
@@ -80,6 +81,7 @@ def get_commandline_arguments():
         parser.add_argument('-p', '--push', help='Push new code / builds to remote git repo')
         parser.add_argument('-c', '--clone', help='Clone remote git repo.Example: python3 pygit.py --clone {url}\nDownload Path is set to default at Desktop')
         parser.add_argument('-i', '--init', help='Initialise pygit in local repo.Example: python3 pygit --init {cwd}.Where cwd is the full path to the directory you want to initialise pygit in.')
+        parser.add_argument('-a', '--add', help="Add file contents to the index.Usage: python3 -m pygit add .")
         return parser.parse_args()
     except argparse.ArgumentError as e:
         print('Unknown argument')
@@ -117,6 +119,8 @@ class Commands(object):
             Commands.push()
         elif self.argument == 'set_global_credentials':
             Commands.set_globals(self.argument_content)
+        elif self.argument == 'add':
+            Commands.add(self.argument_content)
 
     @staticmethod
     def automate_actions(action, commit_msg="new changes"):
@@ -132,6 +136,17 @@ class Commands(object):
                 Commands.push(os.getcwd())
         else:
             return "Unknown action {}".format(action)
+
+    @staticmethod
+    def add(mode):
+        if mode == '.':
+            print('Add all mode.Resulting to git.')
+            os.system("git add .")
+        print("Adding {} to index...".format(mode))
+        os.system("git add {}".format(mode))
+        print('done')
+        return
+
     @staticmethod
     def set_globals(username_password):
         #todo: fix yes or no query

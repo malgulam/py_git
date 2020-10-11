@@ -21,7 +21,7 @@ def initialise():
     print('Initialising....')
     #check if system supports git
     osType = detect_os()
-    if 'windows' in osType:
+    if 'windows' in str(osType).lower():
         WindowsOSObj = WindowsSupport(activate=True)
     if not git_exists(osType):
         sys.exit(1)

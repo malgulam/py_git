@@ -6,23 +6,46 @@ import shelve
 from colorit import *
 from pathlib import Path
 import shutil
-
+import subprocess
 
 class WindowsSupport(object):
     WINDOWS_GIT_PATH = ''
+    git = ''
     def __init__(self, activate=False, argument=None, argument_content=None):
         self.activate = activate
         if self.activate == False:
             print('Windows Support disabled')
         print('Windows Support Activated')
-        if not WindowsSupport.retrieve_windows_git_path():
+        if not WindowsSupport.retrieve_windows_git_path("git"):
             print('git not found on windows system.')
             sys.exit(1)
         WindowsSupport.recognize_commands(self, self.argument, self.argument_content)
     #boolean function
-    def retrieve_windows_git_path():
-        print()
-        pass
+    def retrieve_windows_git_path(executable):
+        if os.path.sep in executable:
+            raise ValueError("Invalid filename: %s" % executable)
+        path = os.environ.get("PATH", "").split(os.pathsep)
+        # PATHEXT tells us which extensions an executable may have
+        path_exts = os.environ.get("PATHEXT", ".exe;.bat;.cmd").split(";")
+        has_ext = os.path.splitext(executable)[1] in path_exts
+        if not has_ext:
+            exts = path_exts
+        else:
+            # Don't try to append any extensions
+            exts = [""]
+
+        for d in path:
+            try:
+                for ext in exts:
+                    exepath = os.path.join(d, executable + ext)
+                    if os.access(exepath, os.X_OK):
+                        WINDOWS_GIT_PATH += exepath
+                        git += exepath
+                        return True
+            except OSError:
+                return False
+
+        return False
     def recognize_commands(self, argument, argument_content):
         self.argument = argument
         self.argument_content = argument_content
@@ -47,14 +70,14 @@ class WindowsSupport(object):
     @staticmethod
     def automate_actions(action, commit_msg="new changes"):
         #todo: set actions to all possible automate actions
-        actions = ['push', 'clone']
+        actions = ['push']
         #if the action in actions ? redirect to distinct func : return error
         if action in actions:
             if action == 'push':
-                os.system("git pull")
-                os.system("git add .")
-                os.system("git status")
-                os.system(f"git commit -m '{commit_msg}.Pushed with automate_actions'")
+                subprocess.Popen('{0} pull'.format(git))
+                subprocess.Popen("{0} add .".format(git))
+                subprocess.Popen("{0} status".format(git))
+                subprocess.Popen(f"{git} commit -m '{commit_msg}.Pushed with automate_actions'")
                 WindowsSupport.push(path=os.getcwd())
         else:
             return "Unknown action {}".format(action)
@@ -63,9 +86,9 @@ class WindowsSupport(object):
     def add(mode):
         if mode == '.':
             print('Add all mode.Resulting to git.')
-            os.system("git add .")
+            subprocess.Popen(f"{git} add .")
         print("Adding {} to index...".format(mode))
-        os.system("git add {}".format(mode))
+        subprocess.Popen(f"{git} add {mode}")
         print('done')
         return
 
@@ -104,7 +127,7 @@ class WindowsSupport(object):
     @staticmethod
     def init(cwd):
         os.chdir(cwd)
-        os.system("git init")
+        subprocess.Popen(f"{git} init")
         print("initialised git!")
         return
     @staticmethod
@@ -119,13 +142,13 @@ class WindowsSupport(object):
         print("Cloning to Desktop")
         cwd = os.getcwd()
         os.chdir(path)
-        os.system("git clone {}".format(url))
+        subprocess.Popen(f"{git} clone {url}")
         os.chdir(cwd)
         return
     @staticmethod
     def push(path):
         print("Pushing new code")
-        os.system("git push")
+        subprocess.Popen(f"{git} push")
     @staticmethod
     def safe_mkdir(path):
         print("Initialised safe_mkdir()\n Making dir in safe mode.")

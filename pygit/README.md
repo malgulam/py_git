@@ -11,6 +11,12 @@ bash terminal
 $ python3 -m pygit --automate_actions push
 $ python3 -m pygit --automate_actions push
 ```
+ - If installed as package use:
+ ```bash
+---------------------------------------------------------------------------------------------------
+$ cd PyGit
+$ python3 pygit/pygit.py --automate_actions push
+``` 
  - The above bash code helps the developer effortlessly push new code / builds to Github with little to no further
  input.
  - The automate_actions has a parameter known as commit_msg set to 'new changes' at default.

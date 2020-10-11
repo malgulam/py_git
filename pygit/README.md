@@ -8,7 +8,7 @@
 ```bash
 bash terminal 
 ---------------------------------------------------------------------------------------------------
-$ pip3 install PyGit-0.1 
+$ pip3 install PyGit-0.2
 $ python3 -m pygit --automate_actions push
 $ python3 -m pygit --automate_actions push
 ```

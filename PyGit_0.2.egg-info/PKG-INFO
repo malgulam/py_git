@@ -1,5 +1,5 @@
 Metadata-Version: 2.1
-Name: PyGit
+Name: PyGit-0.2
 Version: 0.1
 Summary: Essentially: Pythonically Git.
 Home-page: https://github.com/malgulam/PyGit
@@ -16,6 +16,7 @@ Description: ![Image of PyGit Logo](https://github.com/malgulam/PyGit/blob/maste
         ```bash
         bash terminal 
         ---------------------------------------------------------------------------------------------------
+        $ pip3 install PyGit-0.1
         $ python3 -m pygit --automate_actions push
         $ python3 -m pygit --automate_actions push
         ```
@@ -43,8 +44,8 @@ Description: ![Image of PyGit Logo](https://github.com/malgulam/PyGit/blob/maste
         
 Keywords: Essentially: Pythonically Git.
 Platform: UNKNOWN
-Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
-Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.7
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown

@@ -2,7 +2,7 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
-    name="pythonic-git-essentials",
+    name="PyGit-0.2",
     version="0.1",
     author="druzgeorge",
     description="Essentially: Pythonically Git.",
@@ -11,9 +11,9 @@ setuptools.setup(
     url="https://github.com/malgulam/PyGit",
     packages=setuptools.find_packages(),
     classifiers=[
-         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
     ],
     keywords='Essentially: Pythonically Git.',
     download_url='https://github.com/malgulam/PyGit/archive/master.zip',

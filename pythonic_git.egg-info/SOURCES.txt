@@ -1,0 +1,14 @@
+README.md
+setup.py
+core/Commands.py
+core/WindowsSupport.py
+core/__init__.py
+pygit/__init__.py
+pygit/exceptions.py
+pygit/pygitSC.py
+pythonic_git.egg-info/PKG-INFO
+pythonic_git.egg-info/SOURCES.txt
+pythonic_git.egg-info/dependency_links.txt
+pythonic_git.egg-info/not-zip-safe
+pythonic_git.egg-info/requires.txt
+pythonic_git.egg-info/top_level.txt

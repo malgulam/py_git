@@ -1,0 +1,14 @@
+README.md
+setup.py
+PyGit_0.1.egg-info/PKG-INFO
+PyGit_0.1.egg-info/SOURCES.txt
+PyGit_0.1.egg-info/dependency_links.txt
+PyGit_0.1.egg-info/not-zip-safe
+PyGit_0.1.egg-info/requires.txt
+PyGit_0.1.egg-info/top_level.txt
+core/Commands.py
+core/WindowsSupport.py
+core/__init__.py
+pygit/__init__.py
+pygit/exceptions.py
+pygit/pygitSC.py

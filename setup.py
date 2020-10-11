@@ -1,9 +1,10 @@
 import setuptools
+import pygit
 with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
-    name="PyGit-0.2",
-    version="0.1",
+    name="py_git",
+    version=0.2,
     author="druzgeorge",
     description="Essentially: Pythonically Git.",
     long_description = long_description,

@@ -5,12 +5,18 @@
  -  PyGit is a python package / module that helps developers get the best out of Git, quickly and effeciently. 
  
  - With its simple function calls such as:
+  ```bash
+ bash terminal
+---------------------------------------------------------------------------------------------------
+python3 py_git/pygit.py --a_a push
+```
+
 ```bash
 bash terminal 
 ---------------------------------------------------------------------------------------------------
-$ pip3 install PyGit-0.2
-$ python3 -m pygit --automate_actions push
-$ python3 -m pygit --automate_actions push
+$ pip3 install py_git
+$ python3 -m py_git.pygit --automate_actions push
+$ python3 -m py_git.pygit --automate_actions push
 ```
  - If installed as package use:
  ```bash

@@ -2,4 +2,3 @@
 import sys
 sys.path.append('.')
 from core.Commands import Commands
-# Commands = Commands()

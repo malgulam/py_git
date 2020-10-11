@@ -19,7 +19,7 @@ $ python3 -m pygit --automate_actions push
  functionality depends on git software.
 ## Requirements:
  - Initialise of SSH keys in os.path['PATH'] to enable quick push, pull, fetch, merge, etc.Make sure you have gone through the creation and deployment of SSH keys to github account to enable the program run without needing to always cache credentials.
- - Python3+
+ - Python3.6+
  - Directory name of realpath of current working file as shown in the code samples one line 15 and 16.
  - Linux based operating system.This is as a result of the default file handling operations carried out.This can be modified to run on Windows OS.
  - At least 2GB of RAM.

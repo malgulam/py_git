@@ -6,6 +6,7 @@ sys.path.append('PyGit/')
 from pygit import DESKTOP, SHELF_DIR
 import os
 import shelve 
+import PySimpleGUI as sg
 from colorit import *
 from pathlib import Path
 import shutil
@@ -82,14 +83,28 @@ class Commands(object):
         #spliting username_password into a list separated by ','
         credentials = str(username_password).split('/')
         #making sure coloit will be usable in commandline interfaces
-        print(color_front("This is very dangerous!", red=255, green=0, blue=0))
-        print(color_front("Setting credentials to global is efficent but insecure.\nYour information will be stored in "
+        sg.theme('SandyBeach')
+        layout = [
+            [sg.Text("This is very dangerous!")],
+            [sg.Text("Setting credentials to global is efficent but insecure.\nYour information will be stored in "
                           f"{SHELF_DIR} as a shelve file.\nYou can proceed but it is advised to "
-                          f"setup SSH keys for your github to avoid using this.\nRead this:{color_front('https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account', red=0, green=255, blue=0)}"
-                          , red=255, green=0, blue=0))
-        opt = input(f"\n\nDO YOU WISH TO PROCEED? y(Y)es/n(N)o: ")
+                          f"setup SSH keys for your github to avoid using this.\nRead this:'https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account'"
+                          )],
+            [sg.Text("Do you wish to continue?")],
+            [sg.Yes(), sg.No()]
+                        
+        ]
+        window = sg.Window('WARNING', layout)
+        event, values = window.read()
+        window.close()
+        # print(color_front("This is very dangerous!", red=255, green=0, blue=0))
+        # print(color_front("Setting credentials to global is efficent but insecure.\nYour information will be stored in "
+        #                   f"{SHELF_DIR} as a shelve file.\nYou can proceed but it is advised to "
+        #                   f"setup SSH keys for your github to avoid using this.\nRead this:{color_front('https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account', red=0, green=255, blue=0)}"
+        #                   , red=255, green=0, blue=0))
+        opt = event
         opt = opt.lower()
-        if opt == "y" or "yes":
+        if opt ==  "yes":
             print("Working...")
             try:
                 Commands.safe_mkdir(SHELF_DIR)
@@ -103,9 +118,12 @@ class Commands(object):
                 Commands.shelfer(key='global_credentials', content=credentials)
             print("Done...")
             return
-        else:
+        elif opt == 'no':
             print(color_front("Aborted!", red=255, green=0, blue=0))
-            print(color_front("Read: https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account \n On how to perform adding SSH key to account", red=0, green=150, blue=240))
+            print(color_front(f"Read: https://docs.github.com/en/free-pro-team@latest/github/authenticating-to-github/adding-a-new-ssh-key-to-your-github-account ", red=0, green=150, blue=240) ,color_front("On how to perform adding SSH key to account", 255,255,255))
+            sys.exit(1)
+        else:
+            print('error!')
             sys.exit(1)
     @staticmethod
     def init(cwd):

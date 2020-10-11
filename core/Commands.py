@@ -1,6 +1,15 @@
 #commands class to handle the commands and execution of commands
 
 #imports
+import sys
+sys.path.append('PyGit/')
+from pygit import DESKTOP
+import os
+import shelve 
+from colorit import *
+from pathlib import Path
+import shutil
+# from .core.Commands import Commands
 
 
 #Commands Class

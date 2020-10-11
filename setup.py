@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 setuptools.setup(
     name="py_git",
-    version=0.2,
+    version=0.1,
     author="druzgeorge",
     description="Essentially: Pythonically Git.",
     long_description = long_description,

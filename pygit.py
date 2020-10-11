@@ -39,7 +39,7 @@ def initialise():
     for command_arg_content in commands_arg_content:
         if command_arg_content:
             #pass commands list the index fothe command_Arg_content item to get it's respective command
-            CommandsObj = Commands(commands[commands_arg_content.index(command_arg_content)],command_arg_content)
+            CommandsObj = Commands(windows_support=False,argument=commands[commands_arg_content.index(command_arg_content)],argument_content=command_arg_content)
         else:
             pass
 

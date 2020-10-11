@@ -3,14 +3,13 @@
 #imports
 import sys
 sys.path.append('PyGit/')
-from pygit import DESKTOP
+from pygit import DESKTOP, SHELF_DIR
 import os
 import shelve 
 from colorit import *
 from pathlib import Path
 import shutil
-
-
+from core.WindowsSupport import WindowsSupport
 
 #Commands Class
 class Commands(object):
@@ -22,9 +21,13 @@ class Commands(object):
     def __str__(self):
         return ('Commands {} {}'.format(self.name,self.dir) )
 
-    def __init__(self, argument, argument_content):
+    def __init__(self, windows_support=False, argument=None, argument_content=None):
         self.argument = argument
         self.argument_content = argument_content
+        self.windows_support = windows_support
+        #passing arguments to WindowsSupport Class if windows_support == True
+        if windows_support == True:
+            WindowsSupportObj = WindowsSupport(activate=True, argument=self.argument, argument_content=self.argument_content)
         Commands.recognize_commands(self, self.argument, self.argument_content)
     def recognize_commands(self, argument, argument_content):
         self.argument = argument
@@ -40,8 +43,9 @@ class Commands(object):
         elif self.argument == 'init':
             Commands.init(cwd=self.argument_content)
         elif  self.argument == 'push':
-            Commands.push()
+            Commands.push(path=os.getcwd())
         elif self.argument == 'set_global_credentials':
+            print(self.argument_content)
             Commands.set_globals(self.argument_content)
         elif self.argument == 'add':
             Commands.add(self.argument_content)
@@ -57,7 +61,7 @@ class Commands(object):
                 os.system("git add .")
                 os.system("git status")
                 os.system(f"git commit -m '{commit_msg}.Pushed with automate_actions'")
-                Commands.push(os.getcwd())
+                Commands.push(path=os.getcwd())
         else:
             return "Unknown action {}".format(action)
 
@@ -121,8 +125,8 @@ class Commands(object):
         print("Cloning to Desktop")
         cwd = os.getcwd()
         os.chdir(path)
-        os.chdir(cwd)
         os.system("git clone {}".format(url))
+        os.chdir(cwd)
         return
     @staticmethod
     def push(path):
